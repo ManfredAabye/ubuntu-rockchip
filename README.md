@@ -1,48 +1,48 @@
-## Overview
+## Überblick
 
 [![Latest GitHub Release](https://img.shields.io/github/release/Joshua-Riek/ubuntu-rockchip.svg?label=Latest%20Release)](https://github.com/Joshua-Riek/ubuntu-rockchip/releases/latest)
 [![Total GitHub Downloads](https://img.shields.io/github/downloads/Joshua-Riek/ubuntu-rockchip/total.svg?&color=E95420&label=Total%20Downloads)](https://github.com/Joshua-Riek/ubuntu-rockchip/releases)
 [![Nightly GitHub Build](https://github.com/Joshua-Riek/ubuntu-rockchip/actions/workflows/nightly.yml/badge.svg)](https://github.com/Joshua-Riek/ubuntu-rockchip/actions/workflows/nightly.yml)
 
-Ubuntu Rockchip is a community project porting Ubuntu to Rockchip hardware with the goal of providing a stable and fully functional environment.
+Ubuntu Rockchip ist ein Community-Projekt, das Ubuntu auf Rockchip-Hardware portiert, mit dem Ziel, eine stabile und voll funktionsfähige Umgebung bereitzustellen.
 
 ## Highlights
 
-* Available for both Ubuntu 22.04 LTS (with Rockchip Linux 5.10) and Ubuntu 24.04 LTS (with Rockchip Linux 6.1)
-* Package management via apt using the official Ubuntu repositories
-* Receive all updates and changes through apt
-* Desktop first-run wizard for user setup and configuration
-* 3D hardware acceleration support via panfork
-* Fully working GNOME desktop using wayland
-* Chromium browser with smooth 4k youtube video playback
-* MPV video player capable of smooth 4k video playback
+* Verfügbar für Ubuntu 22.04 LTS (mit Rockchip Linux 5.10) und Ubuntu 24.04 LTS (mit Rockchip Linux 6.1)
+* Paketverwaltung über apt mit den offiziellen Ubuntu-Repositorys
+* Erhalte alle Updates und Änderungen über apt
+* Desktop-Ersteinrichtungsassistent für Benutzereinrichtung und Konfiguration
+* 3D-Hardwarebeschleunigung unterstützt durch panfork
+* Voll funktionsfähiger GNOME-Desktop mit Wayland
+* Chromium-Browser mit flüssiger 4K-YouTube-Videowiedergabe
+* MPV-Videoplayer, der flüssige 4K-Videowiedergabe ermöglicht
 
 ## Installation
 
-Make sure you use a good, reliable, and fast SD card. For example, suppose you encounter boot or stability troubles. Most of the time, this is due to either an insufficient power supply or related to your SD card (bad card, bad card reader, something went wrong when burning the image, or the card is too slow).
+Stelle sicher, dass du eine gute, zuverlässige und schnelle SD-Karte verwendest. Wenn du beispielsweise Boot- oder Stabilitätsprobleme hast, liegt dies meist entweder an einer unzureichenden Stromversorgung oder an deiner SD-Karte (schlechte Karte, schlechter Kartenleser, etwas ist beim Schreiben des Images schiefgelaufen oder die Karte ist zu langsam).
 
-Download the Ubuntu image for your specific board from the latest [release](https://github.com/Joshua-Riek/ubuntu-rockchip/releases) on GitHub or from the dedicated download [website](https://joshua-riek.github.io/ubuntu-rockchip-download/). Then write the xz compressed image (no previous unpacking necessary) to your SD card using [USBimager](https://bztsrc.gitlab.io/usbimager/) or [balenaEtcher](https://www.balena.io/etcher) since, unlike other tools, these can validate burning results, saving you from corrupted SD card contents.
+Lade das Ubuntu-Image für dein spezifisches Board aus dem neuesten [Release](https://github.com/Joshua-Riek/ubuntu-rockchip/releases) auf GitHub oder von der dedizierten Download-[Website](https://joshua-riek.github.io/ubuntu-rockchip-download/) herunter. Schreibe dann das xz-komprimierte Image (ohne vorherige Entpackung) auf deine SD-Karte mit [USBimager](https://bztsrc.gitlab.io/usbimager/) oder [balenaEtcher](https://www.balena.io/etcher), da diese im Gegensatz zu anderen Tools die Schreibvorgänge validieren können, was dich vor beschädigten SD-Karteninhalten bewahrt.
 
-## Boot the System
+## System starten
 
-Insert your SD card into the slot on the board and power on the device. The first boot may take up to two minutes, so please be patient.
+Stecke deine SD-Karte in den Steckplatz auf dem Board und schalte das Gerät ein. Der erste Start kann bis zu zwei Minuten dauern, also habe bitte etwas Geduld.
 
-## Login Information
+## Anmeldeinformationen
 
-For Ubuntu Server you will be able to login through HDMI, a serial console connection, or SSH. The predefined user is `ubuntu` and the password is `ubuntu`.
+Für Ubuntu Server kannst du dich über HDMI, eine serielle Konsolenverbindung oder SSH anmelden. Der vordefinierte Benutzer ist `ubuntu` und das Passwort ist `ubuntu`.
 
-For Ubuntu Desktop you must connect through HDMI and follow the setup-wizard.
+Für Ubuntu Desktop musst du dich über HDMI verbinden und den Einrichtungsassistenten durchlaufen.
 
-## Support the Project
+## Unterstütze das Projekt
 
-There are a few things you can do to support the project:
+Es gibt ein paar Dinge, die du tun kannst, um das Projekt zu unterstützen:
 
-* Star the repository and follow me on GitHub
-* Share and upvote on sites like Twitter, Reddit, and YouTube
-* Report any bugs, glitches, or errors that you find (some bugs I may not be able to fix)
-* Sponsor me on GitHub; any contribution will be greatly appreciated
+* Markiere das Repository mit einem Stern und folge mir auf GitHub
+* Teile und bewerte auf Seiten wie Twitter, Reddit und YouTube
+* Melde alle Fehler, Probleme oder Ungereimtheiten, die du findest (einige Fehler kann ich möglicherweise nicht beheben)
+* Spende mir auf GitHub; jeder Beitrag wird sehr geschätzt
 
-These things motivate me to continue development and provide validation that my work is appreciated. Thanks in advance!
+Diese Dinge motivieren mich, die Entwicklung fortzusetzen und geben mir die Bestätigung, dass meine Arbeit geschätzt wird. Vielen Dank im Voraus!
 
 ---
-> Ubuntu is a trademark of Canonical Ltd. Rockchip is a trademark of Fuzhou Rockchip Electronics Co., Ltd. The Ubuntu Rockchip project is not affiliated with Canonical Ltd or Fuzhou Rockchip Electronics Co., Ltd. All other product names, logos, and brands are property of their respective owners. The Ubuntu name is owned by [Canonical Limited](https://ubuntu.com/).
+> Ubuntu ist eine Marke von Canonical Ltd. Rockchip ist eine Marke von Fuzhou Rockchip Electronics Co., Ltd. Das Ubuntu Rockchip-Projekt ist nicht mit Canonical Ltd oder Fuzhou Rockchip Electronics Co., Ltd. verbunden. Alle anderen Produktnamen, Logos und Marken sind Eigentum ihrer jeweiligen Inhaber. Der Name Ubuntu ist im Besitz von [Canonical Limited](https://ubuntu.com/).
