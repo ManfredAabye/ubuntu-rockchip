@@ -1,5 +1,48 @@
 ## Überblick
 
+### **1. `build-orangepi-3b.sh`**
+- **Beschreibung**: Dieses Skript erstellt ein **minimalistisches Server-Image** für den **Orange Pi 3B**.
+- **Funktionen**:
+  - Es installiert ein Basis-System ohne zusätzliche Software wie PHP oder Datenbanken.
+  - Es ist ideal für Benutzer, die ein schlankes System benötigen und später selbst entscheiden möchten, welche Software sie installieren.
+- **Verwendung**:
+  - Wenn du ein einfaches Server-System ohne zusätzliche Abhängigkeiten benötigst.
+  - Wenn du ein System haben möchtest, das du später nach Belieben anpassen kannst.
+
+
+### **2. `build-orangepi-3b-desktop.sh`**
+- **Beschreibung**: Dieses Skript erstellt ein **Desktop-Image** für den **Orange Pi 3B**.
+- **Funktionen**:
+  - Es installiert eine vollständige Desktop-Umgebung (z. B. GNOME oder XFCE) und alle notwendigen Treiber.
+  - Es ist ideal für Benutzer, die den Orange Pi 3B als Desktop-Computer verwenden möchten.
+- **Verwendung**:
+  - Wenn du den Orange Pi 3B als Desktop-Computer verwenden möchtest.
+  - Wenn du eine grafische Benutzeroberfläche (GUI) benötigst.
+
+
+### **3. `build-orangepi-3b-media-center.sh`**
+- **Beschreibung**: Dieses Skript erstellt ein **Media-Center-Image** für den **Orange Pi 3B**.
+- **Funktionen**:
+  - Es installiert **Kodi** (ein beliebtes Media-Center) und zusätzliche Plugins.
+  - Es konfiguriert Kodi so, dass es beim Systemstart automatisch gestartet wird.
+  - Es ist ideal für Benutzer, die den Orange Pi 3B als Media-Center verwenden möchten.
+- **Verwendung**:
+  - Wenn du den Orange Pi 3B als Media-Center für Filme, Musik und Fotos verwenden möchtest.
+  - Wenn du eine benutzerfreundliche Oberfläche für Multimedia-Inhalte benötigst.
+
+
+### **4. `build-orangepi-3b-opensim-server.sh`**
+- **Beschreibung**: Dieses Skript erstellt ein **OpenSim-Server-Image** für den **Orange Pi 3B**.
+- **Funktionen**:
+  - Es installiert alle notwendigen Pakete für einen OpenSim-Server, darunter Apache, PHP, MariaDB und Dotnet 8.
+  - Es legt die Datenbanken `robust`, `sim1`, `sim2`, `sim3`, `sim4` und `sim5` an.
+  - Es lädt OpenSim herunter und entpackt es im Verzeichnis `/home/opensim`.
+  - Es ist ideal für Benutzer, die den Orange Pi 3B als Server für OpenSim (ein Open-Source-Simulator für virtuelle Welten) verwenden möchten.
+- **Verwendung**:
+  - Wenn du den Orange Pi 3B als Server für OpenSim verwenden möchtest.
+  - Wenn du eine vorkonfigurierte Umgebung für OpenSim benötigst.
+    
+
 [![Latest GitHub Release](https://img.shields.io/github/release/Joshua-Riek/ubuntu-rockchip.svg?label=Latest%20Release)](https://github.com/ManfredAabye/ubuntu-rockchip/releases/latest)
 [![Total GitHub Downloads](https://img.shields.io/github/downloads/Joshua-Riek/ubuntu-rockchip/total.svg?&color=E95420&label=Total%20Downloads)](https://github.com/ManfredAabye/ubuntu-rockchip/releases)
 [![Nightly GitHub Build](https://github.com/ManfredAabye/ubuntu-rockchip/actions/workflows/nightly.yml/badge.svg)](https://github.com/ManfredAabye/ubuntu-rockchip/actions/workflows/nightly.yml)
