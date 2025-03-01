@@ -2,7 +2,7 @@
 
 # Script zum Erstellen eines Ubuntu Noble Server-Images für den Orange Pi 3B
 # Autor: Manfred Zainhofer
-# Version: 1.9
+# Version: 1.10
 
 # Variablen
 REPO_URL="https://github.com/ManfredAabye/ubuntu-rockchip.git"
@@ -41,7 +41,10 @@ function check_dependencies() {
 
 function clone_repo() {
     echo "[DEBUG] Klonen des Repositories..."
-    git clone "${REPO_URL}" "${REPO_DIR}"
+    if ! git clone "${REPO_URL}" "${REPO_DIR}"; then
+        echo "Error: Failed to clone repository"
+        exit 1
+    fi
     cd "${REPO_DIR}" || exit 1
     echo "[DEBUG] Repository erfolgreich geklont."
 }
@@ -84,13 +87,11 @@ EOF
 
 function build_image() {
     echo "[DEBUG] Erstelle Image..."
-    ./build.sh --board=orangepi-3b --suite=noble --flavor=server
-    if [ $? -eq 0 ]; then
-        echo "[DEBUG] Image erfolgreich erstellt."
-    else
+    if ! ./build.sh --board=orangepi-3b --suite=noble --flavor=server; then
         echo "[DEBUG] Fehler beim Erstellen des Images."
         exit 1
     fi
+    echo "[DEBUG] Image erfolgreich erstellt."
 }
 
 function locate_image() {
