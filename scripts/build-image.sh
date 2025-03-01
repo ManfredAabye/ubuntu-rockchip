@@ -1,7 +1,7 @@
 #!/bin/bash
 
 set -eE 
-trap 'echo Error: in $0 on line $LINENO' ERR
+trap 'echo Error: in $0 on line $LINENO; cleanup_loopdev ${loop}; exit 1' ERR
 
 cleanup_loopdev() {
     local loop="$1"
@@ -14,10 +14,10 @@ cleanup_loopdev() {
     if [ -b "${loop}" ]; then
         for part in "${loop}"p*; do
             if mnt=$(findmnt -n -o target -S "$part"); then
-                umount "${mnt}"
+                umount "${mnt}" || true
             fi
         done
-        losetup -d "${loop}"
+        losetup -d "${loop}" || true
     fi
 }
 
@@ -29,7 +29,10 @@ wait_loopdev() {
 
     ((++seconds))
 
-    ls -l "${loop}" &> /dev/null
+    if ! ls -l "${loop}" &> /dev/null; then
+        echo "Error: ${loop} did not appear in time"
+        exit 1
+    fi
 }
 
 if [ "$(id -u)" -ne 0 ]; then 
@@ -70,7 +73,7 @@ disk="${loop}"
 trap 'cleanup_loopdev ${loop}' EXIT
 
 # Ensure disk is not mounted
-mount_point=/tmp/mnt
+mount_point=$(mktemp -d)
 umount "${disk}"* 2> /dev/null || true
 umount ${mount_point}/* 2> /dev/null || true
 mkdir -p ${mount_point}
@@ -101,7 +104,7 @@ if [ -z "${img##*server*}" ]; then
     sleep 1
 
     wait_loopdev "${disk}${partition_char}2" 60 || {
-        echo "Failure to create ${disk}${partition_char}1 in time"
+        echo "Failure to create ${disk}${partition_char}2 in time"
         exit 1
     }
 
@@ -182,9 +185,12 @@ echo "UUID=${root_uuid,,} /              ext4    defaults,x-systemd.growfs    0 
 # Write bootloader to disk image
 if [ -f "${mount_point}/writable/usr/lib/u-boot/u-boot-rockchip.bin" ]; then
     dd if="${mount_point}/writable/usr/lib/u-boot/u-boot-rockchip.bin" of="${loop}" seek=1 bs=32k conv=fsync
-else
+elif [ -f "${mount_point}/writable/usr/lib/u-boot/idbloader.img" ]; then
     dd if="${mount_point}/writable/usr/lib/u-boot/idbloader.img" of="${loop}" seek=64 conv=notrunc
     dd if="${mount_point}/writable/usr/lib/u-boot/u-boot.itb" of="${loop}" seek=16384 conv=notrunc
+else
+    echo "Error: Bootloader files not found"
+    exit 1
 fi
 
 # Run build image hook to handle board specific changes
@@ -198,16 +204,19 @@ sync --file-system
 sync
 
 # Umount partitions
-umount "${disk}${partition_char}1"
+umount "${disk}${partition_char}1" || true
 umount "${disk}${partition_char}2" 2> /dev/null || true
 
 # Remove loop device
-losetup -d "${loop}"
+losetup -d "${loop}" || true
 
 # Exit trap is no longer needed
 trap '' EXIT
 
 echo -e "\nCompressing $(basename "${img}.xz")\n"
-xz -6 --force --keep --quiet --threads=0 "${img}"
+if ! xz -6 --force --keep --quiet --threads=0 "${img}"; then
+    echo "Error: Failed to compress ${img}"
+    exit 1
+fi
 rm -f "${img}"
 cd ../images && sha256sum "$(basename "${img}.xz")" > "$(basename "${img}.xz.sha256")"

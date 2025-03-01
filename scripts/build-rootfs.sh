@@ -1,7 +1,7 @@
 #!/bin/bash
 
 set -eE 
-trap 'echo Error: in $0 on line $LINENO' ERR
+trap 'echo Error: in $0 on line $LINENO; exit 1' ERR
 
 if [ "$(id -u)" -ne 0 ]; then 
     echo "Please run as root"
@@ -16,11 +16,23 @@ if [[ -z ${SUITE} ]]; then
     exit 1
 fi
 
+# Load suite configuration
+if [[ ! -f "../config/suites/${SUITE}.sh" ]]; then
+    echo "Error: Suite configuration file ../config/suites/${SUITE}.sh not found"
+    exit 1
+fi
+
 # shellcheck source=/dev/null
 source "../config/suites/${SUITE}.sh"
 
 if [[ -z ${FLAVOR} ]]; then
     echo "Error: FLAVOR is not set"
+    exit 1
+fi
+
+# Load flavor configuration
+if [[ ! -f "../config/flavors/${FLAVOR}.sh" ]]; then
+    echo "Error: Flavor configuration file ../config/flavors/${FLAVOR}.sh not found"
     exit 1
 fi
 
@@ -37,19 +49,37 @@ tmp_dir=$(mktemp -d)
 cd "${tmp_dir}" || exit 1
 
 # Clone the livecd rootfs fork
-git clone https://github.com/Joshua-Riek/livecd-rootfs
+if ! git clone https://github.com/Joshua-Riek/livecd-rootfs; then
+    echo "Error: Failed to clone livecd-rootfs repository"
+    exit 1
+fi
 cd livecd-rootfs || exit 1
 
 # Install build deps
-apt-get update
-apt-get build-dep . -y
+if ! apt-get update; then
+    echo "Error: Failed to update package lists"
+    exit 1
+fi
+if ! apt-get build-dep . -y; then
+    echo "Error: Failed to install build dependencies"
+    exit 1
+fi
 
 # Build the package
-dpkg-buildpackage -us -uc
+if ! dpkg-buildpackage -us -uc; then
+    echo "Error: Failed to build livecd-rootfs package"
+    exit 1
+fi
 
 # Install the custom livecd rootfs package
-apt-get install ../livecd-rootfs_*.deb --assume-yes --allow-downgrades --allow-change-held-packages
-dpkg -i ../livecd-rootfs_*.deb
+if ! apt-get install ../livecd-rootfs_*.deb --assume-yes --allow-downgrades --allow-change-held-packages; then
+    echo "Error: Failed to install livecd-rootfs package"
+    exit 1
+fi
+if ! dpkg -i ../livecd-rootfs_*.deb; then
+    echo "Error: Failed to install livecd-rootfs package"
+    exit 1
+fi
 apt-mark hold livecd-rootfs
 
 rm -rf "${tmp_dir}"
@@ -68,7 +98,7 @@ export IMAGEFORMAT=none
 export IMAGE_TARGETS=none
 
 # Populate the configuration directory for live build
-lb config \
+if ! lb config \
     --architecture arm64 \
     --bootstrap-qemu-arch arm64 \
     --bootstrap-qemu-static /usr/bin/qemu-aarch64-static \
@@ -83,7 +113,10 @@ lb config \
     --mirror-binary "http://ports.ubuntu.com" \
     --parent-mirror-binary "http://ports.ubuntu.com" \
     --keyring-packages ubuntu-keyring \
-    --linux-flavours "${KERNEL_FLAVOR}"
+    --linux-flavours "${KERNEL_FLAVOR}"; then
+    echo "Error: Failed to configure live build"
+    exit 1
+fi
 
 if [ "${SUITE}" == "noble" ] || [ "${SUITE}" == "jammy" ]; then
     # Pin rockchip package archives
@@ -137,10 +170,16 @@ else
 fi
 
 # Build the rootfs
-lb build
+if ! lb build; then
+    echo "Error: Failed to build rootfs"
+    exit 1
+fi
 
 set -eE 
 
 # Tar the entire rootfs
-(cd chroot/ &&  tar -p -c --sort=name --xattrs ./*) | xz -3 -T0 > "ubuntu-${RELASE_VERSION}-preinstalled-${FLAVOR}-arm64.rootfs.tar.xz"
+if ! (cd chroot/ &&  tar -p -c --sort=name --xattrs ./*) | xz -3 -T0 > "ubuntu-${RELASE_VERSION}-preinstalled-${FLAVOR}-arm64.rootfs.tar.xz"; then
+    echo "Error: Failed to create rootfs tarball"
+    exit 1
+fi
 mv "ubuntu-${RELASE_VERSION}-preinstalled-${FLAVOR}-arm64.rootfs.tar.xz" ../
